@@ -3,8 +3,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Window;
+import model.Utilisateur;
 import repository.UtilisateurRepository;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import java.sql.SQLException;
 
 public class InscriptionController {
@@ -61,10 +62,14 @@ public class InscriptionController {
         String email = emailIdField.getText();
         String mot_de_passe = MotdepasseField.getText();
 
+        BCryptPasswordEncoder cryptPasswordEncoder = new BCryptPasswordEncoder();
+
 
         UtilisateurRepository  UtilisateurRepository= new UtilisateurRepository();
-        UtilisateurRepository.inscription(nom,prenom,email,mot_de_passe);
 
+
+        UtilisateurRepository.inscription(new Utilisateur(nom,prenom,email,cryptPasswordEncoder.encode(mot_de_passe)));
+          UtilisateurRepository.getutilisateurByEmail(new Utilisateur(nom,prenom,email,cryptPasswordEncoder.encode(mot_de_passe)));
         showAlert(Alert.AlertType.CONFIRMATION, owner, "Registration Successful!",
                 "Welcome " + NomField.getText());
     }

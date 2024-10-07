@@ -3,6 +3,7 @@ package repository;
 
 
 import database.Database;
+import model.Utilisateur;
 
 import java.sql.Connection;
 import java.sql.Statement;
@@ -11,25 +12,38 @@ import java.sql.*;
 public class UtilisateurRepository {
 
 
-    public static void inscription(String nom, String prenom, String email, String mot_de_passe) throws SQLException {
+    public void inscription(Utilisateur utilisateur) throws SQLException {
         Database db = new Database();
         db.getUrl();
         db.getConnection();
-        Connection cnx;
         Connection maConnection = DriverManager.getConnection(
                 "jdbc:mysql://localhost:3306/cours_todolist","root","");
 
         PreparedStatement requetePrepareInsert =
-                maConnection.prepareStatement(
+                db.getConnection().prepareStatement (
                         "INSERT INTO Utilisateur (nom,prenom,email,mot_de_passe) VALUES (?,?,?,?)");
 
-        requetePrepareInsert.setString(1,nom);
-        requetePrepareInsert.setString(2,prenom);
-        requetePrepareInsert.setString(3,email);
-        requetePrepareInsert.setString(3,mot_de_passe);
+        requetePrepareInsert.setString(1, utilisateur.getNom());
+        requetePrepareInsert.setString(2, utilisateur.getPrenom());
+        requetePrepareInsert.setString(3, utilisateur.getEmail());
+        requetePrepareInsert.setString(4, utilisateur.getMot_de_passe());
 
         requetePrepareInsert.executeUpdate();
 
 
     }
+    public void getutilisateurByEmail(Utilisateur utilisateur) throws SQLException {
+        Database db = new Database();
+        db.getConnection();
+
+        PreparedStatement requPrepareSelect = db.getConnection().prepareStatement(
+                "SELECT * FROM Utilisateur WHERE email = ?"
+        );
+
+        requPrepareSelect.setString(1,utilisateur.getEmail());
+
+        ResultSet resultatsRequetes = requPrepareSelect.executeQuery();
+
+    }
+
 }

@@ -10,7 +10,7 @@ public class Database {
     public String NomDeLaBase= "cours_todolist";
 
     public String utilisateur ="root" ;
-    public String Motdepasse = "admin";
+    public String Motdepasse = "";
 
 
 
